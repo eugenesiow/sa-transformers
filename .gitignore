@@ -1,0 +1,5 @@
+__pycache__
+*.pyc
+.idea
+app/model/*
+app/cache_dir
