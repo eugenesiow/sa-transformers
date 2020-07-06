@@ -13,6 +13,7 @@ Routes:
     * `/sentiment` Returns a json object of the targets, target classes and confidence from POST input text.
 """
 
+import os
 import json
 import uvicorn
 from starlette.applications import Starlette
@@ -47,7 +48,15 @@ API_NAME = 'Sentiment Analysis Transformers API'
 VERSION = '1.0'
 
 app = Starlette(debug=DEBUG)
-sa_runner = SARunner(use_cuda=False, cuda_device=0)
+use_cuda = False
+cuda_device = 0
+if 'USE_CUDA' in os.environ:
+    if os.environ['USE_CUDA'] in ['true', 'True', 'TRUE', '1']:
+        use_cuda = True
+if 'CUDA_DEVICE' in os.environ:
+    cuda_device = os.environ['CUDA_DEVICE']
+print('Use CUDA: ', use_cuda)
+sa_runner = SARunner(use_cuda=use_cuda, cuda_device=cuda_device)
 
 
 @app.route('/')
